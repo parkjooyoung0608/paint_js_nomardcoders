@@ -1,4 +1,11 @@
 const canvas = document.getElementById("jsCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = 700;
+canvas.height = 700;
+
+ctx.strokeStyle = "#2c2c2c";
+ctx.lineWidth = 2.5;
 
 let painting = false;
 
@@ -6,26 +13,27 @@ function stopPainting(){
     painting = false;
 }
 
-function onMouseMove(event){
-    const x = event.offsetX;
-    const y = event.offsetY;
-    console.log(x,y)
-}
-
-function onMouseDown(event){
+function startPainting(){
     painting = true;
 }
 
-function onMouseUp(event){
-    stopPainting();
-    // line을 만드는 함수가 필요하기 때문에  stopPainting을 하지않는다.
-}
 
+function onMouseMove(event){
+    const x = event.offsetX;
+    const y = event.offsetY;
+    if(!painting){
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    } else {
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    }
+}
 
 if(canvas) {
     canvas.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("mousedown", onMouseDown);
-    canvas.addEventListener("mouseup", onMouseUp);
+    canvas.addEventListener("mousedown", startPainting);
+    canvas.addEventListener("mouseup", stopPainting);
     canvas.addEventListener("mouseleave", stopPainting);
 
 }
